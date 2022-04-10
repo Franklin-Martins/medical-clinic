@@ -14,9 +14,7 @@ export class MedicsService {
 
   async create(createMedicDto: CreateMedicDto) {
     const medic = await this.medicRepository.findOne({
-      where:{
-        email: createMedicDto.email
-      }
+      email: createMedicDto.email
     })
 
     if(medic) return medic;
@@ -28,15 +26,31 @@ export class MedicsService {
     return await this.medicRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} medic`;
+  async findOne(id: number) {
+    return await this.medicRepository.findOne({id});
   }
 
-  update(id: number, updateMedicDto: UpdateMedicDto) {
-    return `This action updates a #${id} medic`;
+  async findByEmail(email: string) {
+    return await this.medicRepository.findOne({email});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medic`;
+  async update(id: number, updateMedicDto: UpdateMedicDto) {
+    let medicToUpdate = await this.medicRepository.findOne({ id });
+
+    medicToUpdate.email = updateMedicDto.email;
+    medicToUpdate.name = updateMedicDto.name;
+    medicToUpdate.password = updateMedicDto.password;
+
+    await this.medicRepository.save(medicToUpdate);
+
+    return medicToUpdate;
+  }
+
+  async remove(id: number) {
+    let userToDelete = await this.medicRepository.findOne({ id });
+
+    let statusDeleted = await this.medicRepository.remove(userToDelete);
+
+    return statusDeleted;
   }
 }

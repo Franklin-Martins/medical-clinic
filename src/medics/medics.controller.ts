@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Query } from '@nestjs/common';
 import { MedicsService } from './medics.service';
 import { CreateMedicDto } from './dto/create-medic.dto';
 import { UpdateMedicDto } from './dto/update-medic.dto';
@@ -8,27 +8,33 @@ export class MedicsController {
   constructor(private readonly medicsService: MedicsService) {}
 
   @Post()
-  create(@Body() createMedicDto: CreateMedicDto) {
-    return this.medicsService.create(createMedicDto);
+  async create(@Body() createMedicDto: CreateMedicDto) {
+    return await this.medicsService.create(createMedicDto);
   }
 
   @Get()
-  findAll() {
-    return this.medicsService.findAll();
+  async findAll(@Query('email') email:string) {
+    if(!email) return await this.medicsService.findAll()
+
+    const medic = await this.medicsService.findByEmail(email)
+
+    if(!medic) throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND)
+
+    return medic;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.medicsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.medicsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMedicDto: UpdateMedicDto) {
-    return this.medicsService.update(+id, updateMedicDto);
+  async update(@Param('id') id: string, @Body() updateMedicDto: UpdateMedicDto) {
+    return await this.medicsService.update(+id, updateMedicDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.medicsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.medicsService.remove(+id);
   }
 }

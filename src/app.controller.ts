@@ -1,7 +1,6 @@
 import { Controller, Request, Post, UseGuards, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { LocalAuthGuard } from './auth/local-auth.guard';
 
 @Controller()
 export class AppController {
@@ -12,7 +11,6 @@ export class AppController {
     return {message: "Hello world"}
   }
 
-  // @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
     const user = await this.authService.login(req.body);
