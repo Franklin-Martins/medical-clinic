@@ -24,7 +24,8 @@ export class Appointment {
     @Column({type: 'time'})
     endTime: string;
 
-    
+    @Column({default: 'pending'})
+    status: string;    
 
     @ManyToOne(() => User, user => user.appointment)
     user: User;

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Medic } from 'src/medics/entities/medic.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
@@ -9,7 +11,7 @@ import { Appointment } from './entities/appointment.entity';
 export class AppointmentsService {
   constructor(
     @InjectRepository(Appointment)
-    private appointmentRepository: Repository<Appointment>
+    private appointmentRepository: Repository<Appointment>,
   ){}
   
   async create(createAppointmentDto: CreateAppointmentDto) {
@@ -21,15 +23,22 @@ export class AppointmentsService {
   }
 
   async findOne(id: number) {
-    const appointment = await this.appointmentRepository.findOne({
-      where: { id }
-    });
+    const appointment = await this.appointmentRepository.findOne({id});
 
     return appointment;
   }
 
   async update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-    return `This action updates a #${id} appointment`;
+    let appointment = await this.appointmentRepository.findOne({id});
+    console.log(appointment);
+    appointment.day = updateAppointmentDto.day;
+    appointment.startTime = updateAppointmentDto.startTime;
+    appointment.endTime = updateAppointmentDto.endTime;
+    appointment.status = updateAppointmentDto.status;
+
+    await this.appointmentRepository.save(appointment);
+
+    return appointment;
   }
 
   async remove(id: number) {
