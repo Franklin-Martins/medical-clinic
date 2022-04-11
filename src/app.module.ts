@@ -15,7 +15,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
     MedicsModule,
     AppointmentsModule
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}
