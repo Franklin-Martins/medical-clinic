@@ -15,6 +15,6 @@ export class Medic {
     @Column()
     email: string;
 
-    @OneToMany(()=> Appointment, appointment => appointment.medic)
+    @OneToMany(()=> Appointment, appointment => appointment.medic, {onDelete: 'CASCADE'})
     appointment: Appointment[]
 }

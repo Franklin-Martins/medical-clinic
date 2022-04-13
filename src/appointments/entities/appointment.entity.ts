@@ -27,9 +27,9 @@ export class Appointment {
     @Column({default: 'pending'})
     status: string;    
 
-    @ManyToOne(() => User, user => user.appointment)
+    @ManyToOne(() => User, user => user.appointment, {onDelete: 'CASCADE'})
     user: User;
 
-    @ManyToOne(() => Medic, medic => medic.appointment)
+    @ManyToOne(() => Medic, medic => medic.appointment, {onDelete: 'CASCADE'})
     medic: Medic;
 }

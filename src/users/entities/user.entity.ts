@@ -15,6 +15,6 @@ export class User {
     @Column()
     email: string;
 
-    @OneToMany(()=> Appointment, appointment => appointment.user)
+    @OneToMany(()=> Appointment, appointment => appointment.user, { onDelete: 'CASCADE' })
     appointment: Appointment[]
 }
