@@ -15,14 +15,12 @@ export class UsersController {
 
   // @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Query('email') email: string) {
-    if(!email)return await this.usersService.findAll();
+  async findAll() {
+    const users = await this.usersService.findAll();
 
-    const user = await this.usersService.findByEmail(email)
+    if(!users) throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND)
 
-    if(!user) throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND)
-
-    return user;
+    return users;
   }
 
   @Get(':id')

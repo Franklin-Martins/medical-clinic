@@ -13,14 +13,12 @@ export class MedicsController {
   }
 
   @Get()
-  async findAll(@Query('email') email:string) {
-    if(!email) return await this.medicsService.findAll()
+  async findAll() {
+    const medics = await this.medicsService.findAll();
 
-    const medic = await this.medicsService.findByEmail(email)
+    if(!medics) throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND)
 
-    if(!medic) throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND)
-
-    return medic;
+    return medics;
   }
 
   @Get(':id')
